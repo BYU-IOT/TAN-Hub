@@ -20,6 +20,9 @@ import command
 import commands
 import requests
 
+localPort = 8000
+localAddress = 'localhost'
+
 CloudAddress = 'localhost'
 CloudPort = "8080"
 CLOUD_API_ENDPOINT = "http://" + CloudAddress + ":" + CloudPort + "/sendData"
@@ -59,6 +62,7 @@ class S(BaseHTTPRequestHandler):
 
         jsondata = json.dumps(body, default=obj_dict)
         print(jsondata)
+        print("\n")
         jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
 
         #send data back
@@ -74,15 +78,16 @@ class S(BaseHTTPRequestHandler):
         ########## This is a post from the Current MCU ##########
         if self.path == "/sendCurrent":
             data = json.loads(posted_data)
+            print(data)
             for element in data['readings']:
                 ampQueue.put(element)    #put items at the end of the queue
-            print(ampQueue.qsize())
 
+#---------------------uncomment to communicate with Server---------------------------------------
             # if there is wifi then send data to cloud and clear data
-            if check_internet():
-                post_data(ampQueue, 'Current')
-            else:
-                print("no connection to cloud")
+            # if check_internet():
+            #     post_data(ampQueue, 'Current')
+            # else:
+            #     print("no connection to cloud")
 
 
         ########## This is a post from the Temperature MCU ##########
@@ -91,11 +96,12 @@ class S(BaseHTTPRequestHandler):
             for element in data['readings']:
                 tempQueue.put(element)    #put items at the end of the queue
 
+#---------------------uncomment to communicate with Server---------------------------------------
             # if there is wifi then send data to cloud and clear data
-            if check_internet():
-                post_data(tempQueue, 'Temperature')
-            else:
-                print("no connection to cloud")
+            # if check_internet():
+            #     post_data(tempQueue, 'Temperature')
+            # else:
+            #     print("no connection to cloud")
 
         ########## This is a post from the User ##########
         elif self.path == "/sendCommands":
@@ -135,8 +141,8 @@ def post_data(dataQueue, sensor):
     # extracting response text
     response = r.status_code
 
-def run(server_class=HTTPServer, handler_class=S, port=8000):
-    IP_address = 'localhost'
+def run(server_class=HTTPServer, handler_class=S, port=localPort):
+    IP_address = localAddress
     server_address = (IP_address, port)
     httpd = server_class(server_address, handler_class)
 
