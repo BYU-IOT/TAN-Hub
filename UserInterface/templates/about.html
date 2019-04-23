@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" type="text/css" href="/../static/css/mystyles.css">
+    <link rel="stylesheet" href="/../static/css/buttons.css">
+    <meta charset="utf-8">
+    <title>Flask Tutorial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <style>
+
+    body, html {
+      height: 50%;
+      margin: 0;
+    }
+
+    .bg {
+      /* The image used */
+      background-image: url("/../static/css/scenery.jpg");
+
+      /* Full height */
+      height: 100%;
+
+      /* Center and scale the image nicely */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  </style>
+  <body>
+    {% extends "template.html" %}
+    {% block content %}
+    <div class="bg"></div>
+    <h1> About </h1>
+    <p> Words Go Here </p>
+
+    <button class="button" onclick="alert('Hello world!')">Read Rate</button>
+    <button class="button" onclick="alert('Hello world!')">Update Rate</button>
+
+    {% endblock %}
+  </body>
+</html>

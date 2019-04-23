@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Example Chat with Server-Sent-Events</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <h1>Example Chat with Server-Sent-Events</h1>
+        <h2>{{num}}</h2>
+
+        <form onsubmit="updateSubscription()" action="javascript:void(0);">
+            <input type="text" id="username" size=25 value="Anon">
+            <input type="submit" value="Change name">
+        </form>
+
+        <div id="chat"></div>
+
+        <form onsubmit="publishMessage()" action="javascript:void(0);">
+            <input type="submit" value="Send" id="send">
+            <div id="message-div"> <input type="text" id="message"> </div>
+        </form>
+
+        <script type="text/javascript">
+        var chatElement = document.getElementById("chat"),
+            usernameElement = document.getElementById("username"),
+            messageElement = document.getElementById("message"),
+            username = null,
+            eventSource = null;
+
+        if (usernameElement.value === 'Anon') {
+            usernameElement.value += Math.round(Math.random() * 1000);
+        }
+
+        updateSubscription();
+
+        function updateSubscription() {
+            if (eventSource !== null) {
+                eventSource.close();
+            }
+
+            username = usernameElement.value;
+
+            // By specifying our username the server can ensure we don't get
+            // our own duplicated messages.
+            eventSource = new EventSource("/subscribe?username=" + username);
+            eventSource.onmessage = function(e) {
+                addMessage(e.data);
+            };
+        }
+
+        function publishMessage() {
+            var message = messageElement.value;
+            addMessage('<strong><em>Me</em></strong>: ' + message);
+            messageElement.value = "";
+
+            var formData = new FormData();
+            // Use username and not usernameElement.value. This ensures the
+            // user has "applied" the username modification.
+            formData.append('username', username);
+            formData.append('message', message);
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("POST", "publish", true);
+            xmlhttp.send(formData);
+
+            // Avoid page refreshing.
+            return false;
+        }
+
+        function addMessage(message) {
+            chatElement.innerHTML += message + '<br>';
+            chatElement.scrollTop += 50;
+        }
+        </script>
+    </body>
+</html>

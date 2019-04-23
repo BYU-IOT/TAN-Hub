@@ -1,0 +1,43 @@
+body {
+	background: url('scenery.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+
+	font: 16px/150% Georgia, Times, 'Times New Roman', serif;
+	//text-indent: 20px;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+	color: #444;
+
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    max-height: 100%;
+}
+
+#chat {
+    background: #CCC;
+    padding: 5px;
+    margin: 20px 0px 5px 0px;
+	border-radius: 5px;
+    max-height: 800px;
+    overflow: auto;
+}
+
+#message-div {
+    overflow: hidden;
+}
+
+#message {
+    width: 100%;
+    //box-sizing: border-box;
+}
+
+#send {
+    float: right;
+}
+
+h1, h2, h3 {
+	font-family: 'Verdana', sans-serif;
+	margin-top: 1.2em;
+	margin-bottom: .5em;
+}
